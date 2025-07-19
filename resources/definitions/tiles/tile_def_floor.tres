@@ -10,8 +10,8 @@ region = Rect2(0, 0, 64, 64)
 [resource]
 script = ExtResource("1_wa2tg")
 texture = SubResource("AtlasTexture_o8a26")
-color_lit = Color(1, 0.498039, 0, 1)
-color_dark = Color(0.498039, 0.215686, 0, 1)
+color_lit = Color(0.839216, 0.839216, 0.839216, 1)
+color_dark = Color(0.498039, 0.498039, 0.498039, 1)
 is_walkable = true
 is_transparent = true
 metadata/_custom_type_script = "uid://7bbnriv82ecm"

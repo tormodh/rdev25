@@ -1,3 +1,4 @@
+class_name Game
 extends Node2D
 
 const player_def: EntityDefinition = preload("res://resources/definitions/entities/actors/entity_def_player.tres")
@@ -5,7 +6,7 @@ const player_def: EntityDefinition = preload("res://resources/definitions/entiti
 @onready var player: Entity
 @onready var eventHandler: EventHandler = $EventHandler
 @onready var entities: Node2D = $Entities
-
+@onready var map: Map = $Map
 
 func _ready() -> void:
 	var playerStartPos: Vector2i = Grid.world_to_grid(get_viewport_rect().size.floor() / 2)
@@ -14,3 +15,11 @@ func _ready() -> void:
 	var npc := Entity.new(playerStartPos + Vector2i.RIGHT, player_def)
 	npc.modulate = Color.ORANGE_RED
 	entities.add_child(npc)
+
+func _physics_process(_delta: float) -> void:
+	var action: Action = eventHandler.get_action()
+	if action:
+		action.perform(self, player)
+
+func get_map_data() -> MapData:
+	return map.map_data
