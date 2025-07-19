@@ -7,3 +7,13 @@ Did set the grid size to 64 to accomodate the different texture, and I do not in
 I also noted that SelinaDev will do input differently this year, I'll have to try and gleam what insight I can from that.
 
 Next plan is to learn more of Godot, and find out how I will structure resources, scripts and stuff. Learning experience.
+
+### Refactor
+
+Cleaned up folder structure to avoid lots of folders in root of project.
+
+Now I have:
+
+ * src/ for code and scenes
+ * resources/ for assets
+ * doc/ for documentation and devlog
