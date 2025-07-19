@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://dxafceyhp4nyk"]
 
-[ext_resource type="Script" uid="uid://ctebwa71xwtwh" path="res://Game/game.gd" id="1_1r4le"]
-[ext_resource type="Texture2D" uid="uid://cmqgitc4wuxqo" path="res://assets-licensed/Delve_Set_Freebies.png" id="2_7raqb"]
-[ext_resource type="Script" uid="uid://simup1c1g2n4" path="res://Game/event_handler.gd" id="3_7raqb"]
+[ext_resource type="Script" uid="uid://ctebwa71xwtwh" path="res://src/game/game.gd" id="1_1r4le"]
+[ext_resource type="Texture2D" uid="uid://cmqgitc4wuxqo" path="res://resources/assets-licensed/Delve_Set_Freebies.png" id="2_7raqb"]
+[ext_resource type="Script" uid="uid://simup1c1g2n4" path="res://src/game/event_handler.gd" id="3_7raqb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7raqb"]
 atlas = ExtResource("2_7raqb")

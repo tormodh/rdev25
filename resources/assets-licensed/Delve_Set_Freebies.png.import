@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cmqgitc4wuxqo"
-path="res://.godot/imported/Delve_Set_Freebies.png-9c28a8e413532e1733f42e3007a9c78e.ctex"
+path="res://.godot/imported/Delve_Set_Freebies.png-41775cf08d24daa1263fe1e3870394a6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets-licensed/Delve_Set_Freebies.png"
-dest_files=["res://.godot/imported/Delve_Set_Freebies.png-9c28a8e413532e1733f42e3007a9c78e.ctex"]
+source_file="res://resources/assets-licensed/Delve_Set_Freebies.png"
+dest_files=["res://.godot/imported/Delve_Set_Freebies.png-41775cf08d24daa1263fe1e3870394a6.ctex"]
 
 [params]
 
