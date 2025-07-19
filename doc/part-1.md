@@ -1,4 +1,6 @@
-## Part 2: Drawing the Player Character and Moving it Around
+## Part 1: Drawing the Player Character and Moving it Around
+
+Tutorial link [SelinaDev Godot 4: Part 0 and 1](https://selinadev.github.io/05-rogueliketutorial-01/)
 
 This part has been straight forward a copy paste from the tutorial. As of now there is little to change; it is just a black triangle.
 

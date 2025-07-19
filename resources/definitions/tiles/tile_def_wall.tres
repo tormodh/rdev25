@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="TileDefinition" load_steps=4 format=3 uid="uid://hdtplacrv2pn"]
+
+[ext_resource type="Script" uid="uid://7bbnriv82ecm" path="res://src/map/tile_definition.gd" id="1_ed8mb"]
+[ext_resource type="Texture2D" uid="uid://cmqgitc4wuxqo" path="res://resources/assets-licensed/Delve_Set_Freebies.png" id="2_g8xyr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_epbc8"]
+atlas = ExtResource("2_g8xyr")
+region = Rect2(256, 0, 64, 64)
+
+[resource]
+script = ExtResource("1_ed8mb")
+texture = SubResource("AtlasTexture_epbc8")
+color_lit = Color(1, 1, 1, 1)
+color_dark = Color(0.498039, 0.498039, 0.498039, 1)
+is_walkable = false
+is_transparent = false
+metadata/_custom_type_script = "uid://7bbnriv82ecm"

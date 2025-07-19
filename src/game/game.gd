@@ -1,17 +1,25 @@
+class_name Game
 extends Node2D
 
-var player_grid_pos := Vector2i.ZERO
+const player_def: EntityDefinition = preload("res://resources/definitions/entities/actors/entity_def_player.tres")
 
-@onready
-var player: Sprite2D = $Player
-@onready var event_handler: EventHandler = $EventHandler
+@onready var player: Entity
+@onready var eventHandler: EventHandler = $EventHandler
+@onready var entities: Node2D = $Entities
+@onready var map: Map = $Map
 
+func _ready() -> void:
+	var playerStartPos: Vector2i = Grid.world_to_grid(get_viewport_rect().size.floor() / 2)
+	player = Entity.new(playerStartPos, player_def)
+	entities.add_child(player)
+	var npc := Entity.new(playerStartPos + Vector2i.RIGHT, player_def)
+	npc.modulate = Color.ORANGE_RED
+	entities.add_child(npc)
 
-func _process(_delta: float) -> void:
-	var action: Action = event_handler.get_action()
-	
-	if action is MovementAction:
-		player_grid_pos += action.offset
-		player.position = Grid.grid_to_world(player_grid_pos)
-	elif action is EscapeAction:
-		get_tree().quit()
+func _physics_process(_delta: float) -> void:
+	var action: Action = eventHandler.get_action()
+	if action:
+		action.perform(self, player)
+
+func get_map_data() -> MapData:
+	return map.map_data
