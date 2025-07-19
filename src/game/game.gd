@@ -7,7 +7,7 @@ var player: Sprite2D = $Player
 @onready var event_handler: EventHandler = $EventHandler
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var action: Action = event_handler.get_action()
 	
 	if action is MovementAction:
