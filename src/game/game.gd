@@ -9,7 +9,7 @@ const player_def: EntityDefinition = preload("res://resources/definitions/entiti
 @onready var map: Map = $Map
 
 func _ready() -> void:
-	var playerStartPos: Vector2i = Grid.world_to_grid(get_viewport_rect().size.floor() / 2)
+	var playerStartPos: Vector2i = Vector2i(4, 2)
 	player = Entity.new(playerStartPos, player_def)
 	entities.add_child(player)
 	var npc := Entity.new(playerStartPos + Vector2i.RIGHT, player_def)
