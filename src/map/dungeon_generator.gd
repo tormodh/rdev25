@@ -2,10 +2,10 @@ class_name DungeonGenerator
 extends Node
 
 @export_category("Map Dimensions")
-@export var map_width: int = 2
-@export var map_height: int = 2
-@export var cell_width: int = 9
-@export var cell_height: int = 5
+@export var map_width: int = 6
+@export var map_height: int = 4
+@export var cell_width: int = 11
+@export var cell_height: int = 7
 
 var _rng := RandomNumberGenerator.new()
 

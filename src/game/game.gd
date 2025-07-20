@@ -12,8 +12,12 @@ func _ready() -> void:
 	var hardcodeToFirstCell := Vector2i.ZERO
 	#var hardcodeToRandomize := Vector2i.MIN
 	player = Entity.new(hardcodeToFirstCell, player_def)
+	var camera: Camera2D = $Camera2D
+	remove_child(camera)
+	player.add_child(camera)
 	entities.add_child(player)
 	map.generate(player)
+
 
 func _physics_process(_delta: float) -> void:
 	var action: Action = eventHandler.get_action()

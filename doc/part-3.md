@@ -17,3 +17,14 @@ First generated dungeon is a 2x2 cell dungeon with 9x5 tile cell. Hardcoded to a
 Implemented a random DFS with any size cell dungeon. Could also experiment with different room shapes.
 
 Set start cell to walk from to be set from player position, or random if player has no position. Player is set to middle of start cell, expect stair to be in the middle.
+
+Implementing the camera to follow player was a great help with the big tiles, so I also increased the size of the dungeon to 66 x 28 (6x4 cells with 11x7 rooms).
+
+### Notes
+
+I've followed the greater lines of the tutorial, though I generate the dungeon differently. I've also made a bit of a mess in the code. That will need to be cleared up.
+
+The size of the cells and dungeon will definetly have to be adjusted. I'll have to create some different rooms (random and/or hard coded) and see what feels good.
+
+A map view and a pan functionality will be nice to have with time.
+
