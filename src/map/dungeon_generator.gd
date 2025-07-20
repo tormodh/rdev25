@@ -8,8 +8,6 @@ extends Node
 @export var cell_height: int = 5
 
 var _rng := RandomNumberGenerator.new()
-var cells: Array[Cell]
-
 
 func _ready() -> void:
 	_rng.randomize()
@@ -34,46 +32,22 @@ func _carve_cell(dungeon: MapData, cell: Cell, cx: int, cy: int) -> void:
 	if cell.west:
 		_carve_tile(dungeon, (cx*cell_width), (cy*cell_height)+(cell_height/2))
 
+func _generateStaticMaze(maze: MazeData) -> void:
+	maze.cells[0].east = true
+	maze.cells[0].south = true
+	maze.cells[1].west = true
+	maze.cells[2].north = true
+	maze.cells[2].east = true
+	maze.cells[3].west = true
+
 func generate_dungeon() -> MapData:
+	var maze := MazeData.new(map_width, map_height)
+	_generateStaticMaze(maze)
+	
 	var dungeon := MapData.new(map_width*cell_width, map_height*cell_height)
-	
-	#for yy in map_height:
-	#	for xx in map_width:
-	#		cells.append(Cell.new())
-	
-	cells.append(Cell.new())
-	cells.append(Cell.new())
-	cells.append(Cell.new())
-	cells.append(Cell.new())
-	
-	cells[0].east = true
-	cells[0].south = true
-	cells[1].west = true
-	cells[2].north = true
-	cells[2].east = true
-	cells[3].west = true
 	
 	for yy in map_height:
 		for xx in map_width:
-			_carve_cell(dungeon, get_cell(Vector2i(xx, yy)), xx, yy)
+			_carve_cell(dungeon, maze.get_cell(Vector2i(xx, yy)), xx, yy)
 	
 	return dungeon
-
-func get_cell(cell_position: Vector2i) -> Cell:
-	var cell_index: int = cellGrid_to_index(cell_position)
-	if cell_index == -1:
-		return null
-	return cells[cell_index]
-
-func cellGrid_to_index(cell_position: Vector2i) -> int:
-	if not is_in_cell_bounds(cell_position):
-		return -1
-	return cell_position.y * map_width + cell_position.x
-
-func is_in_cell_bounds(coordinate: Vector2i) -> bool:
-	return (
-		0 <= coordinate.x
-		and coordinate.x < cell_width
-		and 0 <= coordinate.y
-		and coordinate.y < cell_height
-	)
