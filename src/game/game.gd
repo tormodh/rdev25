@@ -9,12 +9,11 @@ const player_def: EntityDefinition = preload("res://resources/definitions/entiti
 @onready var map: Map = $Map
 
 func _ready() -> void:
-	var playerStartPos: Vector2i = Vector2i(4, 2)
-	player = Entity.new(playerStartPos, player_def)
+	var hardcodeToFirstCell := Vector2i.ZERO
+	#var hardcodeToRandomize := Vector2i.MIN
+	player = Entity.new(hardcodeToFirstCell, player_def)
 	entities.add_child(player)
-	var npc := Entity.new(playerStartPos + Vector2i.RIGHT, player_def)
-	npc.modulate = Color.ORANGE_RED
-	entities.add_child(npc)
+	map.generate(player)
 
 func _physics_process(_delta: float) -> void:
 	var action: Action = eventHandler.get_action()

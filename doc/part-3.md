@@ -10,4 +10,10 @@ Create a maze from random depth first search. These are the cells. Then work fro
 
 First implementation of a cell would be a open room with a 1 tile opening to each open side of the cell.
 
-First generated dungeon is a 2x2 cell dungeon with 9x5 tile cell. Hardcoded to a C form
+First generated dungeon is a 2x2 cell dungeon with 9x5 tile cell. Hardcoded to a C form.
+
+### Improvement
+
+Implemented a random DFS with any size cell dungeon. Could also experiment with different room shapes.
+
+Set start cell to walk from to be set from player position, or random if player has no position. Player is set to middle of start cell, expect stair to be in the middle.

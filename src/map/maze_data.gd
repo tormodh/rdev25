@@ -4,6 +4,7 @@ extends RefCounted
 var width: int
 var height: int
 var cells: Array[Cell]
+var visitedStack: Array[Cell]
 
 func _init(maze_width: int, maze_height: int) -> void:
 	width = maze_width
@@ -14,7 +15,7 @@ func _setup_cells() -> void:
 	cells = []
 	for y in height:
 		for x in width:
-			cells.append(Cell.new())
+			cells.append(Cell.new(Vector2i(x, y)))
 
 func get_cell(maze_position: Vector2i) -> Cell:
 	var cell_index: int = grid_to_index(maze_position)
@@ -34,3 +35,20 @@ func is_in_bounds(coordinate: Vector2i) -> bool:
 		and 0 <= coordinate.y
 		and coordinate.y < height
 	)
+
+func getNewNeighbours(cell: Cell) -> Array[Cell]:
+	var neighbours: Array[Cell]
+	var candidate = get_cell(cell.position + Vector2i(1,0))
+	if candidate != null && !candidate.seen:
+		neighbours.append(candidate)
+	candidate = get_cell(cell.position + Vector2i(0,1))
+	if candidate != null && !candidate.seen:
+		neighbours.append(candidate)
+	candidate = get_cell(cell.position + Vector2i(-1,0))
+	if candidate != null && !candidate.seen:
+		neighbours.append(candidate)
+	candidate = get_cell(cell.position + Vector2i(0,-1))
+	if candidate != null && !candidate.seen:
+		neighbours.append(candidate)
+	
+	return neighbours
