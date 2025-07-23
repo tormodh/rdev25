@@ -28,3 +28,6 @@ The size of the cells and dungeon will definetly have to be adjusted. I'll have 
 
 A map view and a pan functionality will be nice to have with time.
 
+### Prefabs
+
+I'm doing this not quick, but dirty. I'm storing room metadata in text files, and the map layout in pngs. Currently I can only place on cell prefabs.
