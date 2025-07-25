@@ -30,4 +30,6 @@ A map view and a pan functionality will be nice to have with time.
 
 ### Prefabs
 
-I'm doing this not quick, but dirty. I'm storing room metadata in text files, and the map layout in pngs. Currently I can only place on cell prefabs.
+I'm doing this not quick, but dirty. I'm storing room metadata in text files, and the map layout in pngs. Small rooms can be rotated to fit.
+
+Currently I'm placing one big (2x2) if I can find a place for it. It is still a bit of a hack; the room needs two horisontal corridors, and will not rotate. There also is only one big room. It also tries every cell until it finds a place for a big room, or dungeon is generated.

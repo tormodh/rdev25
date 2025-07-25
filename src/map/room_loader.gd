@@ -24,7 +24,7 @@ func _load_rooms(filename) -> void:
 	var file := FileAccess.open("res://resources/rooms/"+filename, FileAccess.READ)
 	var line := file.get_csv_line()
 	while line.size() > 1:
-		var room := _load_room(line)
+		var _room := _load_room(line)
 		line = file.get_csv_line()
 
 func _load_room(line: PackedStringArray) -> Room:
@@ -48,3 +48,8 @@ func getRoom(cell: Cell) -> Room:
 	if myrooms.is_empty(): return null
 	
 	return myrooms[0]
+
+func getRooms(cell: Cell) -> Array[Room]:
+	if !rooms.has(cell.room_type): return []
+	var myrooms: Array[Room] = rooms.get(cell.room_type)
+	return myrooms

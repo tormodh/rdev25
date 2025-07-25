@@ -12,6 +12,7 @@ const PIPE = 4
 const CORNER = 5
 const TEE = 6
 const CROSS = 7
+const BIG = 10
 
 func _init(in_image: Image):
 	image = in_image
