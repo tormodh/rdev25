@@ -29,4 +29,4 @@ I will try and note down things I do that differ from the tutorial in the `doc/`
  * [Part 0](doc/part-0.md): There is nothing here, really.
  * [Part 1](doc/part-1.md): Mostly just different graphics pack that is not commited to git.
  * [Part 2](doc/part-2.md): Still following tutorial, thinking about what a 64x64 size tileset might mean for game design.
- * [Part 3](doc/part-3.md): Generating a maze of `x` by `y` cells by random Depth First Search, carving out the cells afterwards.
+ * [Part 3](doc/part-3.md): Generating a maze of `x` by `y` cells by random Depth First Search, carving out the dungeon based on prefabs after.

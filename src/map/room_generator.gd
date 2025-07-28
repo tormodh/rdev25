@@ -13,15 +13,6 @@ func _block_tile(dungeon: MapData, x: int, y: int) -> void:
 	var tile: Tile = dungeon.get_tile(tile_position)
 	tile.set_tile_type(dungeon.tile_types.wall)
 
-func createSmallSimpleRoom(cell: Cell, dungeon: MapData) -> void:
-	createSimpleRoom(cell, dungeon)
-	var room := Rect2i(cell.position.x*Cell.cell_width, cell.position.y*Cell.cell_height, Cell.cell_width, Cell.cell_height)
-	var inner: Rect2i = room.grow(-1)
-	_block_tile(dungeon, (inner.position.x), (inner.end.y)-1)
-	_block_tile(dungeon, (inner.end.x)-1, (inner.position.y))
-	_block_tile(dungeon, (inner.position.x), (inner.position.y))
-	_block_tile(dungeon, (inner.end.x)-1, (inner.end.y)-1)
-
 func createSimpleRoom(cell: Cell, dungeon: MapData) -> void:
 	var room := Rect2i(cell.position.x*Cell.cell_width, cell.position.y*Cell.cell_height, Cell.cell_width, Cell.cell_height)
 	var inner: Rect2i = room.grow(-1)
@@ -29,10 +20,10 @@ func createSimpleRoom(cell: Cell, dungeon: MapData) -> void:
 		for x in range(inner.position.x, inner.end.x):
 				_carve_tile(dungeon, x, y)
 	if cell.north:
-		_carve_tile(dungeon, (cell.position.x*Cell.cell_width)+(Cell.cell_width/2.0),(cell.position.y*Cell.cell_height) )
+		_carve_tile(dungeon, (cell.position.x*Cell.cell_width)+(Cell.cell_width/2),(cell.position.y*Cell.cell_height) )
 	if cell.south:
-		_carve_tile(dungeon, (cell.position.x*Cell.cell_width)+(Cell.cell_width/2.0),(cell.position.y*Cell.cell_height)+Cell.cell_height-1 )
+		_carve_tile(dungeon, (cell.position.x*Cell.cell_width)+(Cell.cell_width/2),(cell.position.y*Cell.cell_height)+Cell.cell_height-1 )
 	if cell.east:
-		_carve_tile(dungeon, (cell.position.x*Cell.cell_width)+Cell.cell_width-1, (cell.position.y*Cell.cell_height)+(Cell.cell_height/2.0))
+		_carve_tile(dungeon, (cell.position.x*Cell.cell_width)+Cell.cell_width-1, (cell.position.y*Cell.cell_height)+(Cell.cell_height/2))
 	if cell.west:
-		_carve_tile(dungeon, (cell.position.x*Cell.cell_width), (cell.position.y*Cell.cell_height)+(Cell.cell_height/2.0))
+		_carve_tile(dungeon, (cell.position.x*Cell.cell_width), (cell.position.y*Cell.cell_height)+(Cell.cell_height/2))

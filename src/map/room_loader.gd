@@ -15,13 +15,20 @@ func _load_room_files() -> void:
 	while filename != "":
 		if roomdir.current_is_dir(): printerr("Found directory in rooms directory! ", filename)
 		elif filename.ends_with(".rooms.txt"):
-			_load_rooms(filename)
+			if filename.begins_with("debug."):
+				if Debug.ROOM_LOADER_DEBUG_ROOMS:
+					_load_rooms(filename)
+			else:
+				if Debug.ROOM_LOADER_DEBUG_ROOMS:
+					print("ROOM_LOADER: ", "skipping ", filename, " because of DEBUG SETTINGS" )
+				else:
+					_load_rooms(filename)
 		elif !filename.ends_with(".png") && !filename.ends_with(".png.import"):
 			printerr("Found non room file in rooms directory! ", filename)
 		filename = roomdir.get_next()
 
 func _load_rooms(filename) -> void:
-	if Debug.ROOM_LOADER: print("found ", filename)
+	if Debug.ROOM_LOADER_MSG: print("ROOM_LOADER: ", "found ", filename)
 	var file := FileAccess.open("res://resources/rooms/"+filename, FileAccess.READ)
 	var line := file.get_csv_line()
 	while line.size() > 1:
@@ -29,8 +36,22 @@ func _load_rooms(filename) -> void:
 		if int(line[3]) < 16:
 			_load_small_rooms(line[4], int(line[3]))
 		else:
-			_room = _load_room(line)
+			_load_big_rooms(line[4], int(line[3]))
 		line = file.get_csv_line()
+
+func _load_big_rooms(filename: String, type: int):
+	var _num_type = 0
+	var _curr_type := type
+	var _next_type := -1
+	while _next_type != type && _num_type < 4:
+		_curr_type = _curr_type >> 4
+		_next_type = (((_curr_type << 2)+(_curr_type>>6)) & 255) << 4
+		_curr_type = _curr_type << 4
+		_load_small_room(filename, _curr_type, _num_type)
+		if Debug.ROOM_LOADER_MSG: print("ROOM_LOADER: ", filename, " loaded type ", type>>4, "::", _num_type, " into ", _curr_type, " rooms")
+		_curr_type = _next_type
+		_num_type += 1
+	if Debug.ROOM_LOADER_MSG: print("ROOM_LOADER: ", filename, " loaded into ", _num_type, " rooms")
 
 func _load_small_rooms(filename: String, type: int):
 	_load_small_room(filename, type+0, 0)
@@ -38,9 +59,9 @@ func _load_small_rooms(filename: String, type: int):
 	if type != Room.PIPE:
 		_load_small_room(filename, type+2, 2)
 		_load_small_room(filename, type+3, 3)
-		if Debug.ROOM_LOADER: print("RoomLoader: ", filename, " loaded 4 rooms")
+		if Debug.ROOM_LOADER_MSG: print("ROOM_LOADER: ", filename, " loaded 4 rooms")
 	else:
-		if Debug.ROOM_LOADER: print("RoomLoader: ", filename, " loaded 2 rooms")
+		if Debug.ROOM_LOADER_MSG: print("ROOM_LOADER: ", filename, " loaded 2 rooms")
 
 func _load_small_room(filename: String, type: int, rotation: int) -> Room:
 	var image := Image.load_from_file("res://resources/rooms/" + filename)
@@ -81,7 +102,7 @@ func getRoom(cell: Cell) -> Room:
 	
 	return myrooms[0]
 
-func getRooms(cell: Cell) -> Array[Room]:
-	if !rooms.has(cell.room_type): return []
-	var myrooms: Array[Room] = rooms.get(cell.room_type)
+func getRooms(room_type: int) -> Array[Room]:
+	if !rooms.has(room_type): return []
+	var myrooms: Array[Room] = rooms.get(room_type)
 	return myrooms
