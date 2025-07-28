@@ -13,6 +13,7 @@ var west: bool
 var position: Vector2i
 var seen: bool
 var done: bool
+var big: bool
 
 var num_doors: int
 var room_type: int
