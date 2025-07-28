@@ -4,26 +4,16 @@ extends Resource
 var image: Image
 var dir : int
 
-const NOT_INIT = 0
-const UP = 1
-const DOWN = 2
-const ONE = 3
-const PIPE = 4
-const CORNER = 5
-const TEE = 6
-const CROSS = 7
-const BIG = 10
+const NOT_INIT = 15
+const ONE = 0
+const CORNER = 4
+const PIPE = 8
+const TEE = 10
+const CROSS = 14
 
 func _init(in_image: Image):
 	image = in_image
 	dir = 0
-
-func line_up(cell: Cell) -> void:
-	if cell.door_dir == dir: return
-	while cell.door_dir > dir:
-		_rotate_right()
-	while cell.door_dir < dir:
-		_rotate_left()
 
 func _rotate_right() -> void:
 	dir = (dir + 1)%4

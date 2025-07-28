@@ -33,6 +33,7 @@ func generate_dungeon(player: Entity) -> MapData:
 			big_candidates[Vector2i(x, y)] = true
 	
 	_generateMaze(maze, startCellPos)
+	for cell in maze.cells: cell.calculate_dir()
 	_printMaze_Debug(maze)
 	
 	var dungeon := MapData.new(map_width*Cell.cell_width, map_height*Cell.cell_height)
@@ -48,30 +49,18 @@ func generate_dungeon(player: Entity) -> MapData:
 		for x in map_width:
 			var cell = maze.get_cell(Vector2i(x, y))
 			if !cell.done:
-				cell.calculate_dir()
-				if !hasbig:
-					var bigRoomCells := _canFitBig(cell, maze)
-					if !bigRoomCells.is_empty():
-						var cands := roomLoader.getRooms(cell)
-						if (cands != null && !cands.is_empty()):
-							var room: Room = cands.get(_rng.randi_range(0, cands.size()-1))
-							_placeBig(cell, room, dungeon)
-							hasbig = true
-							for c in bigRoomCells:
-								c.done = true
-				if !cell.done:
-					cell.done = true
-					var cands := roomLoader.getRooms(cell)
-					if (cands != null && !cands.is_empty()):
-						var room: Room = cands.get(_rng.randi_range(0, cands.size()-1))
-						_carveRoom(cell, room, dungeon)
+				cell.done = true
+				var cands := roomLoader.getRooms(cell)
+				if (cands != null && !cands.is_empty()):
+					var room: Room = cands.get(_rng.randi_range(0, cands.size()-1))
+					_carveRoom(cell, room, dungeon)
+				else:
+					var rnd = _rng.randi_range(0,3)
+					rnds.append(rnd)
+					if rnd < 1:
+						roomGenerator.createSmallSimpleRoom(cell, dungeon)
 					else:
-						var rnd = _rng.randi_range(0,3)
-						rnds.append(rnd)
-						if rnd < 1:
-							roomGenerator.createSmallSimpleRoom(cell, dungeon)
-						else:
-							roomGenerator.createSimpleRoom(cell, dungeon)
+						roomGenerator.createSimpleRoom(cell, dungeon)
 	
 	player.grid_position = Vector2i((startCellPos.x*Cell.cell_width) + (Cell.cell_width/2), (startCellPos.y*Cell.cell_height) + (Cell.cell_height/2))
 	
@@ -104,7 +93,6 @@ func _carve_tile_spec(dungeon: MapData, x: int, y: int, td: TileDefinition) -> v
 
 func _generateMaze(maze: MazeData, startpos: Vector2i) -> void:
 	var firstCell := maze.get_cell(startpos)
-	firstCell.room_type = Room.UP
 	_remove_big_candidate(firstCell.position, 1)
 	_visitCell(firstCell, maze)
 
@@ -138,26 +126,6 @@ func _getNextCell(cand: Array[Cell]) -> Cell:
 		return null
 	return cand.get(_rng.randi_range(0, cand.size()-1))
 
-func _canFitBig(cell: Cell, maze: MazeData) -> Array[Cell]:
-	var allCellsBig: Array[Cell]
-	if cell.done: return []
-	if (cell.room_type != Room.PIPE || cell.door_dir != 1): return []
-	allCellsBig.append(cell)
-	var nextcell := maze.get_cell(Vector2i(cell.position.x + 1, cell.position.y))
-	if nextcell == null || nextcell.done: return []
-	nextcell.calculate_dir()
-	if nextcell.room_type != Room.PIPE || nextcell.door_dir != 1: return []
-	allCellsBig.append(nextcell)
-	nextcell = maze.get_cell(Vector2i(cell.position.x + 1, cell.position.y + 1))
-	if nextcell == null || nextcell.done: return []
-	allCellsBig.append(nextcell)
-	nextcell = maze.get_cell(Vector2i(cell.position.x, cell.position.y + 1))
-	if nextcell == null || nextcell.done: return []
-	allCellsBig.append(nextcell)
-	#TELL CELL IT WILL HAVE A BIG ROOM
-	cell.room_type = Room.BIG
-	return allCellsBig
-
 func _placeBig(cell: Cell, room: Room, dungeon: MapData):
 	room.line_up(cell)
 	var blueprint := room.image
@@ -179,7 +147,6 @@ func _placeBig(cell: Cell, room: Room, dungeon: MapData):
 	return
 
 func _carveRoom(cell: Cell, room: Room, dungeon: MapData) -> void:
-	room.line_up(cell)
 	var blueprint := room.image
 	var data := blueprint.get_data()
 	for y in range(Cell.cell_height):

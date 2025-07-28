@@ -1,1 +1,1 @@
-"Stairs up",1,1,1,"1.png"
+"With back wall",1,1,0,"1.png"
