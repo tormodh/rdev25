@@ -40,18 +40,18 @@ func _load_rooms(filename) -> void:
 		line = file.get_csv_line()
 
 func _load_big_rooms(filename: String, type: int):
-	var _num_type = 0
-	var _curr_type := type
-	var _next_type := -1
-	while _next_type != type && _num_type < 4:
-		_curr_type = _curr_type >> 4
-		_next_type = (((_curr_type << 2)+(_curr_type>>6)) & 255) << 4
-		_curr_type = _curr_type << 4
-		_load_small_room(filename, _curr_type, _num_type)
-		if Debug.ROOM_LOADER_MSG: print("ROOM_LOADER: ", filename, " loaded type ", type>>4, "::", _num_type, " into ", _curr_type, " rooms")
-		_curr_type = _next_type
-		_num_type += 1
-	if Debug.ROOM_LOADER_MSG: print("ROOM_LOADER: ", filename, " loaded into ", _num_type, " rooms")
+	var num_type = 0
+	var curr_type := type
+	var next_type := -1
+	while next_type != type && num_type < 4:
+		curr_type = curr_type >> 4
+		next_type = (((curr_type << 2)+(curr_type>>6)) & 255) << 4
+		curr_type = curr_type << 4
+		_load_small_room(filename, curr_type, num_type)
+		if Debug.ROOM_LOADER_MSG: print("ROOM_LOADER: ", filename, " loaded type ", type>>4, "::", num_type, " into ", curr_type, " rooms")
+		curr_type = next_type
+		num_type += 1
+	if Debug.ROOM_LOADER_MSG: print("ROOM_LOADER: ", filename, " loaded into ", num_type, " rooms")
 
 func _load_small_rooms(filename: String, type: int):
 	_load_small_room(filename, type+0, 0)

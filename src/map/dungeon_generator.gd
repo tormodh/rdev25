@@ -8,7 +8,7 @@ extends Node
 
 var _rng := RandomNumberGenerator.new()
 
-var big_candidates: Dictionary[Vector2i, bool]
+var _big_candidates: Dictionary[Vector2i, bool]
 
 func _ready() -> void:
 	#_rng.randomize()
@@ -25,10 +25,10 @@ func generate_dungeon(player: Entity) -> MapData:
 		startCellPos = Vector2i( player.grid_position.x / Cell.cell_width, player.grid_position.y / Cell.cell_height)
 		print("Got pos: ", player.grid_position, " set start cell to: ", startCellPos)
 	
-	big_candidates.clear()
+	_big_candidates.clear()
 	for y in range(map_height-1):
 		for x in range(map_width-1):
-			big_candidates[Vector2i(x, y)] = true
+			_big_candidates[Vector2i(x, y)] = true
 	
 	_generateMaze(maze, startCellPos)
 	for cell in maze.cells: cell.calculate_dir()
@@ -60,19 +60,19 @@ func generate_dungeon(player: Entity) -> MapData:
 
 func _placeBigRooms(maze: MazeData, dungeon: MapData, roomLoader: RoomLoader):
 	var numberOfRoomsToTry := ((map_height * map_width) / 4) / 2
-	if Debug.MAZE_GENERATION_MSG: print("MAZE_GENERATION: ", "Attempt ", numberOfRoomsToTry, " big rooms. There are ", big_candidates.keys().size(), " candidates")
+	if Debug.MAZE_GENERATION_MSG: print("MAZE_GENERATION: ", "Attempt ", numberOfRoomsToTry, " big rooms. There are ", _big_candidates.keys().size(), " candidates")
 	for i in range(numberOfRoomsToTry):
-		var cell_index := _rng.randi_range(0, big_candidates.keys().size()-1)
-		var cell_pos: Vector2i = big_candidates.keys()[cell_index]
+		var cell_index := _rng.randi_range(0, _big_candidates.keys().size()-1)
+		var cell_pos: Vector2i = _big_candidates.keys()[cell_index]
 		_remove_big_candidate(cell_pos, 2)
 		_mark_cells_as_part_of_room(maze, cell_pos, 2) #TODO: method on MazeData
-		if Debug.MAZE_GENERATION_TRACE: print("MAZE_GENERATION: ", "Room ", i, " at ", cell_pos, ". There are ", big_candidates.keys().size() , " candidates left")
-		var _big_room_type = _calc_big_room_type(maze, cell_pos)
-		var _big_room_type_min = _calc_min_type(_big_room_type)
+		if Debug.MAZE_GENERATION_TRACE: print("MAZE_GENERATION: ", "Room ", i, " at ", cell_pos, ". There are ", _big_candidates.keys().size() , " candidates left")
+		var big_room_type = _calc_big_room_type(maze, cell_pos)
+		var big_room_type_min = _calc_min_type(big_room_type)
 		var cell := maze.get_cell(cell_pos)
-		var cands := roomLoader.getRooms(_big_room_type<<4)
+		var cands := roomLoader.getRooms(big_room_type<<4)
 		if (cands == null || cands.is_empty()):
-			if Debug.MAZE_GENERATION_MSG: print("MAZE_GENERATION: ", "Require big room type ", String.num_int64(_big_room_type).lpad(3), " min ( ", String.num_int64(_big_room_type_min).lpad(3), " :: ", String.num_int64(_big_room_type_min, 2).lpad(8, "0"), " ) key ( ", String.num_int64(_big_room_type_min<<4).lpad(4), " )")
+			if Debug.MAZE_GENERATION_MSG: print("MAZE_GENERATION: ", "Require big room type ", String.num_int64(big_room_type).lpad(3), " min ( ", String.num_int64(big_room_type_min).lpad(3), " :: ", String.num_int64(big_room_type_min, 2).lpad(8, "0"), " ) key ( ", String.num_int64(big_room_type_min<<4).lpad(4), " )")
 			continue
 		var room: Room = cands.get(_rng.randi_range(0, cands.size()-1))
 		_carveBigRoom(cell, room, dungeon)
@@ -187,7 +187,7 @@ func _remove_big_candidate(pos: Vector2i, size: int):
 		if y < 0: continue
 		for x in range(rect.position.x, rect.end.x):
 			if x < 0: continue
-			big_candidates.erase(Vector2i(x, y))
+			_big_candidates.erase(Vector2i(x, y))
 
 func _printMaze_Debug(maze: MazeData):
 	if !Debug.MAZE_GENERATION_MSG || !Debug.MAZE_GENERATION_TRACE: return
