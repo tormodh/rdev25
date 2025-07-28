@@ -1,5 +1,5 @@
 class_name Action
 extends RefCounted
 
-func perform(game: Game, entity: Entity) -> void:
+func perform(_game: Game, _entity: Entity) -> void:
 	pass

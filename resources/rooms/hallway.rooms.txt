@@ -1,0 +1,3 @@
+"Hallway",1,1,8,"hallway.png"
+"Hallway2",1,1,8,"hallway-2.png"
+"Hallway3",1,1,8,"hallway-3.png"
