@@ -21,6 +21,8 @@ script = ExtResource("4_l80un")
 [node name="FieldOfView" type="Node" parent="Map"]
 script = ExtResource("5_xptat")
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Tiles" type="Node2D" parent="Map"]
+
+[node name="Entities" type="Node2D" parent="Map"]
 
 [node name="Camera2D" type="Camera2D" parent="."]

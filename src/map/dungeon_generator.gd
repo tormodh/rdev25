@@ -25,6 +25,10 @@ func generate_dungeon(player: Entity) -> MapData:
 		startCellPos = Vector2i( player.grid_position.x / Cell.cell_width, player.grid_position.y / Cell.cell_height)
 		print("Got pos: ", player.grid_position, " set start cell to: ", startCellPos)
 	
+	var dungeon := MapData.new(map_width*Cell.cell_width, map_height*Cell.cell_height)
+	player.grid_position = Vector2i((startCellPos.x*Cell.cell_width) + (Cell.cell_width/2), (startCellPos.y*Cell.cell_height) + (Cell.cell_height/2))
+	dungeon.entities.append(player)
+	
 	_big_candidates.clear()
 	for y in range(map_height-1):
 		for x in range(map_width-1):
@@ -34,7 +38,6 @@ func generate_dungeon(player: Entity) -> MapData:
 	for cell in maze.cells: cell.calculate_dir()
 	_printMaze_Debug(maze)
 	
-	var dungeon := MapData.new(map_width*Cell.cell_width, map_height*Cell.cell_height)
 	var roomLoader := RoomLoader.new()
 	
 	_placeBigRooms(maze, dungeon, roomLoader)
@@ -53,8 +56,6 @@ func generate_dungeon(player: Entity) -> MapData:
 					_carveRoom(cell, room, dungeon)
 				else:
 					roomGenerator.createSimpleRoom(cell, dungeon)
-	
-	player.grid_position = Vector2i((startCellPos.x*Cell.cell_width) + (Cell.cell_width/2), (startCellPos.y*Cell.cell_height) + (Cell.cell_height/2))
 	
 	return dungeon
 

@@ -9,10 +9,12 @@ const tile_types = {
 var width: int
 var height: int
 var tiles: Array[Tile]
+var entities: Array[Entity]
 
 func _init(map_width: int, map_height: int) -> void:
 	width = map_width
 	height = map_height
+	entities = []
 	_setup_tiles()
 
 func _setup_tiles() -> void:

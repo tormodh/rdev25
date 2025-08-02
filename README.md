@@ -31,3 +31,4 @@ I will try and note down things I do that differ from the tutorial in the `doc/`
  * [Part 2](doc/part-2.md): Still following tutorial, thinking about what a 64x64 size tileset might mean for game design.
  * [Part 3](doc/part-3.md): Generating a maze of `x` by `y` cells by random Depth First Search, carving out the dungeon based on prefabs after.
  * [Part 4](doc/part-4.md): Field of view. I'm not going to invent anything; this is a bit of copy-ish paste-ish.
+ * [Part 5](doc/part-5.md): (wip) Monsters
