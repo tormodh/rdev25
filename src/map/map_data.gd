@@ -47,3 +47,9 @@ func is_in_bounds(coordinate: Vector2i) -> bool:
 func get_tile_xy(x: int, y: int) -> Tile:
 	var grid_position := Vector2i(x, y)
 	return get_tile(grid_position)
+
+func get_blocking_entity_at_location(grid_position: Vector2i) -> Entity:
+	for entity in entities:
+		if entity.is_blocking_movement() and entity.grid_position == grid_position:
+			return entity
+	return null
