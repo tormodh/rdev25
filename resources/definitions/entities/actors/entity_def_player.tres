@@ -9,6 +9,8 @@ region = Rect2(0, 128, 64, 64)
 
 [resource]
 script = ExtResource("1_p7iuh")
+name = "Player"
 texture = SubResource("AtlasTexture_fwwve")
 color = Color(0.533333, 0.533333, 1, 1)
+is_blocking_movement = true
 metadata/_custom_type_script = "uid://cub8bongvgm3g"

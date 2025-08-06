@@ -6,9 +6,14 @@ extends Node
 @export var map_height: int = 4
 @warning_ignore_start("integer_division","narrowing_conversion")
 
+const entity_types = {
+	"kobold": preload("res://resources/definitions/entities/actors/entity_def_kobold.tres"),
+	#"troll": preload("res://assets/definitions/entities/actors/entity_definition_troll.tres"),
+}
 var _rng := RandomNumberGenerator.new()
 
 var _big_candidates: Dictionary[Vector2i, bool]
+var _mon_candidates: Array[AlledgedMonster]
 
 func _ready() -> void:
 	#_rng.randomize()
@@ -25,6 +30,12 @@ func generate_dungeon(player: Entity) -> MapData:
 		startCellPos = Vector2i( player.grid_position.x / Cell.cell_width, player.grid_position.y / Cell.cell_height)
 		print("Got pos: ", player.grid_position, " set start cell to: ", startCellPos)
 	
+	var dungeon := MapData.new(map_width*Cell.cell_width, map_height*Cell.cell_height)
+	player.grid_position = Vector2i((startCellPos.x*Cell.cell_width) + (Cell.cell_width/2), (startCellPos.y*Cell.cell_height) + (Cell.cell_height/2))
+	dungeon.entities.append(player)
+	
+	_mon_candidates.clear()
+	
 	_big_candidates.clear()
 	for y in range(map_height-1):
 		for x in range(map_width-1):
@@ -34,29 +45,53 @@ func generate_dungeon(player: Entity) -> MapData:
 	for cell in maze.cells: cell.calculate_dir()
 	_printMaze_Debug(maze)
 	
-	var dungeon := MapData.new(map_width*Cell.cell_width, map_height*Cell.cell_height)
 	var roomLoader := RoomLoader.new()
 	
 	_placeBigRooms(maze, dungeon, roomLoader)
 	_printMaze_Debug(maze)
-
-	var roomGenerator := RoomGenerator.new()
 	
+	_placeSmallRooms(maze, dungeon, roomLoader)
+	_placeFallbackRooms(maze, dungeon)
+	
+	_place_entities(dungeon)
+	
+	return dungeon
+
+func _place_entities(dungeon: MapData):
+	for a in _mon_candidates:
+		if randi_range(0, 99) < a.chance:
+			if dungeon.get_tile(a.position).is_walkable():
+				print("place monster at ", a.position)
+				_place_kobold(a.position, dungeon)
+			else:
+				printerr("no monster; not walkable at ", a.position)
+		else:
+			print("no monster; random fail at ", a.position)
+
+func _place_kobold(position: Vector2i, dungeon: MapData):
+	var kobold: Entity
+	kobold = Entity.new(position, entity_types.kobold)
+	dungeon.entities.append(kobold)
+
+func _placeFallbackRooms(maze: MazeData, dungeon: MapData):
+	var roomGenerator := RoomGenerator.new()
 	for y in map_height:
 		for x in map_width:
 			var cell = maze.get_cell(Vector2i(x, y))
 			if !cell.done:
 				cell.done = true
+				roomGenerator.createSimpleRoom(cell, dungeon)
+
+func _placeSmallRooms(maze: MazeData, dungeon: MapData, roomLoader: RoomLoader):
+	for y in map_height:
+		for x in map_width:
+			var cell = maze.get_cell(Vector2i(x, y))
+			if !cell.done:
 				var cands := roomLoader.getRooms(cell.room_type)
 				if (cands != null && !cands.is_empty()):
 					var room: Room = cands.get(_rng.randi_range(0, cands.size()-1))
 					_carveRoom(cell, room, dungeon)
-				else:
-					roomGenerator.createSimpleRoom(cell, dungeon)
-	
-	player.grid_position = Vector2i((startCellPos.x*Cell.cell_width) + (Cell.cell_width/2), (startCellPos.y*Cell.cell_height) + (Cell.cell_height/2))
-	
-	return dungeon
+					cell.done = true
 
 func _placeBigRooms(maze: MazeData, dungeon: MapData, roomLoader: RoomLoader):
 	var numberOfRoomsToTry := ((map_height * map_width) / 4) / 2
@@ -80,6 +115,14 @@ func _placeBigRooms(maze: MazeData, dungeon: MapData, roomLoader: RoomLoader):
 		maze.get_cell(Vector2i(cell_pos.x, cell_pos.y+1)).done = true
 		maze.get_cell(Vector2i(cell_pos.x+1, cell_pos.y+1)).done = true
 		maze.get_cell(Vector2i(cell_pos.x+1, cell_pos.y)).done = true
+		var m1 := AlledgedMonster.new()
+		m1.position = Vector2i(
+			cell.position.x*Cell.cell_width + randi_range(0, (Cell.cell_width*2)-1),
+			cell.position.y*Cell.cell_height + randi_range(0, (Cell.cell_height*2)-1)
+			)
+		m1.level = 0
+		m1.chance = 100
+		_mon_candidates.append(m1)
 
 
 func _calc_big_room_type(maze: MazeData, pos: Vector2i) -> int:
@@ -169,7 +212,6 @@ func _carveBigRoom(cell: Cell, room: Room, dungeon: MapData):
 				_carve_tile_spec(dungeon, (cell.position.x*Cell.cell_width+x), (cell.position.y*Cell.cell_height+y), dungeon.tile_types.floor)
 			else:
 				_carve_tile_spec(dungeon, (cell.position.x*Cell.cell_width+x), (cell.position.y*Cell.cell_height+y), dungeon.tile_types.wall)
-	return
 
 func _carveRoom(cell: Cell, room: Room, dungeon: MapData) -> void:
 	var blueprint := room.image
